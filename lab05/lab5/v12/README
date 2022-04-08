@@ -1,0 +1,30 @@
+mysh -- jsh
+
+This program is a shell called jsh made by Kyochul Jang. A letter `j` of jsh means the first letter of my last name.
+
+This contains 6 `.c` files 6 `.o` files 1 header file and one makefile.
+
+    First, `main.c` is a file that runs the infinite loop with `while (1)`. In the infinite loop, it gets the input from the user and 
+change the input to the string by putting `\0` at the end of the array. When it fnishes putting the input to the char array, 
+it decides which function to run among those `.c` files except the `main.c` file. If the user is not running the functions, 
+then it forks and run the child process. Once it finishes, the loop goes to the beginning and run the program infinitely. 
+Even if the user type `x`, the shell will not be terminated.
+
+    Second, `cprompt.c` is changing the prompt. The default prompt is `$`. By typing `cprompt <num>`, the user can change the prompt. 
+The `num` has four opions. The function parse the input and get what option user wants. Option 1 is changing to the defualt prompt. Option 2 is
+changing the prompt to '>'. Option 3 is changing to PID. Option 4 is changing to `#` which is my own prompt.
+
+    Third, `mem.c` is saving memo. There are only 10 notes that the user store. By typing `mem <memo>`, user can store the memo. 
+If the user write more than 10 notes, then the oldest note will be overwritten by the newest memo. If the user only type `mem`, then user can 
+view the memo from the newest one to the oldest one. In the function, there is `if` and `else` which differentiate the `mem` and `mem <memo>`
+by counting the `strlen` of the input of the user. When the user add more than 10 notes and want to view from the newest to the oldest, count
+the number of the memo and mod 10 which will give me the number less then 10. Do two for loops which loop from `counter % 10` to `0` and which
+loops from `9` to `(counter % 10) + 1`. By doing this way, I can show the memo notes from the newest to oldest.
+
+    Fourth, `d.c` is delaying and execute the legacy executables. I parse the input to get the seconds to wait to run the child process and the
+legacy executables to run. If the user only type d, then the `delayflag` will not be changed to 1 and will not run the function. In the function,
+fork another child process and run the legacy executables. In this case, the parent process doesn't call `waitpid()` function to wait the child
+process to be terminated. Therefore, when it the user type `d 3 ls`, it runs ls after 3 seconds. But the parent process works at the same time.
+
+    The last function is `x.c`. It terminates the shell by calling `exit(1)`.  But when `exit(1)` is called, the program is terminated with
+some beautiful strings. Also, I free all the memory that I allocated in `mem.c` in the `x.c` file.
